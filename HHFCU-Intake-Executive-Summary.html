@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>HHFCU Intake — Executive Summary</title>
+<style>
+  @page{ size:Letter; margin:0; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--blue:#0070ba;--deep:#0a4a78;--dark:#06304f;--ink:#20303d;--muted:#5b6675;--line:#dbe3ea;--soft:#eef6fc}
+  body{font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);font-size:10.4px;line-height:1.42;width:8.5in;min-height:11in;margin:0 auto;background:#fff}
+  .page{padding:0.5in 0.55in}
+  header{display:flex;align-items:center;gap:14px;border-bottom:3px solid var(--blue);padding-bottom:12px;margin-bottom:14px}
+  .crest{width:56px;height:56px;flex:0 0 auto}
+  .h-txt h1{font-size:16.5px;color:var(--dark);letter-spacing:.3px;font-family:Georgia,serif}
+  .h-txt .sub{color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:2px;font-size:8px;margin-top:2px}
+  .h-txt .meta{color:var(--muted);font-size:8.5px;margin-top:3px}
+  .doc-label{margin-left:auto;text-align:right;color:var(--muted);font-size:8.5px}
+  .doc-label strong{display:block;color:var(--dark);font-size:11px}
+  h2{font-size:11px;color:var(--deep);text-transform:uppercase;letter-spacing:.6px;border-bottom:1.5px solid var(--line);padding-bottom:4px;margin:14px 0 8px;display:flex;align-items:center;gap:7px}
+  h2 .n{background:var(--blue);color:#fff;width:15px;height:15px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:800}
+  p{margin-bottom:6px}
+  .lead{background:var(--soft);border-left:3px solid var(--blue);padding:9px 11px;border-radius:5px;font-size:10.2px;color:#31495c}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}
+  ul{list-style:none;margin:2px 0}
+  li{position:relative;padding-left:14px;margin-bottom:4px}
+  li::before{content:"";position:absolute;left:0;top:5px;width:6px;height:6px;border-radius:50%;background:var(--blue)}
+  li b{color:var(--dark)}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
+  .card{border:1px solid var(--line);border-radius:7px;padding:8px 9px;background:#fbfdff}
+  .card .t{font-weight:800;color:var(--deep);font-size:9px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+  .card .d{font-size:8.8px;color:var(--muted)}
+  .status{display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;background:#f6fafd;border:1px solid var(--line);border-radius:7px;padding:9px 12px;font-size:9.4px}
+  .status .row{display:flex;justify-content:space-between;gap:8px;border-bottom:1px dotted #cdd9e3;padding-bottom:3px}
+  .status .row:last-child,.status .row:nth-last-child(2){border-bottom:0}
+  .ok{color:#1b7a43;font-weight:700}
+  .pend{color:#b06a00;font-weight:700}
+  .links{font-size:9px;color:var(--muted);word-break:break-all}
+  .links a{color:var(--blue);text-decoration:none}
+  .next{background:#fff8ec;border:1px solid #f0dcae;border-radius:7px;padding:9px 12px;font-size:9.6px}
+  footer{margin-top:14px;border-top:1px solid var(--line);padding-top:8px;color:var(--muted);font-size:8px;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <svg class="crest" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="47" fill="#fff" stroke="#0a4a78" stroke-width="3"/>
+      <circle cx="50" cy="50" r="39" fill="none" stroke="#0070ba" stroke-width="1"/>
+      <polygon points="50,26 72,39 28,39" fill="#0a4a78"/>
+      <rect x="31" y="41" width="38" height="3.5" fill="#0a4a78"/>
+      <rect x="34" y="46" width="4.5" height="19" fill="#0a4a78"/>
+      <rect x="43" y="46" width="4.5" height="19" fill="#0a4a78"/>
+      <rect x="52" y="46" width="4.5" height="19" fill="#0a4a78"/>
+      <rect x="61" y="46" width="4.5" height="19" fill="#0a4a78"/>
+      <rect x="29" y="67" width="42" height="3.5" fill="#0a4a78"/>
+    </svg>
+    <div class="h-txt">
+      <h1>Heritage Hub Federal Credit Union</h1>
+      <div class="sub">Digital Membership Intake — Executive Summary</div>
+      <div class="meta">2645 Winrock Blvd, Houston, TX 77057 &nbsp;•&nbsp; (832) 941-9122 &nbsp;•&nbsp; heritagehubfederal.org</div>
+    </div>
+    <div class="doc-label"><strong>Confidential</strong>Prepared Sept 2026</div>
+  </header>
+
+  <p class="lead"><b>What was delivered:</b> a secure, mobile-friendly <b>online membership intake form</b> that lets prospective members complete their application and upload supporting documents from any device — replacing the manual, print-and-scan PDF process. It is brand-matched to Heritage Hub FCU and ready to plug into the credit union's website.</p>
+
+  <h2><span class="n">1</span>What the Form Does</h2>
+  <div class="grid">
+    <ul>
+      <li><b>Two applications in one link</b> — a one-click toggle between a <b>Simple (single-owner)</b> membership and a <b>Full business</b> application with beneficial-ownership &amp; BSA details.</li>
+      <li><b>Complete data capture</b> — business info, owners/control person, authorized signers, eligibility, account selection, beneficiaries, and required disclosures.</li>
+      <li><b>Built-in guidance &amp; validation</b> — required fields, live progress bar, and formatting for EIN, SSN, phone, and dates reduce incomplete submissions.</li>
+    </ul>
+    <ul>
+      <li><b>Document upload (8 categories)</b> — EIN letter, formation/DBA certificate, ID, resolution, and more. <b>Accepts every file type</b> (PDF, HEIC, JPG, Word…).</li>
+      <li><b>Phone-camera capture</b> — applicants can photograph documents directly, or pick files/photos, or drag-and-drop on desktop.</li>
+      <li><b>Legally-adopted e-signature</b> — sign by drawing or typing, with an E-SIGN / UETA adoption statement and a captured audit trail.</li>
+    </ul>
+  </div>
+
+  <h2><span class="n">2</span>Key Capabilities</h2>
+  <div class="cards">
+    <div class="card"><div class="t">Any Device</div><div class="d">Phone, tablet, or computer; fully responsive.</div></div>
+    <div class="card"><div class="t">All File Types</div><div class="d">PDF, HEIC, images, Word — up to 25&nbsp;MB each.</div></div>
+    <div class="card"><div class="t">E-Signable</div><div class="d">Draw or type; E-SIGN/UETA compliant.</div></div>
+    <div class="card"><div class="t">On-Brand</div><div class="d">Real HHFCU logo &amp; colors.</div></div>
+  </div>
+
+  <h2><span class="n">3</span>Security &amp; Compliance Posture</h2>
+  <ul>
+    <li>Designed to send applications <b>only to Heritage Hub FCU's own secure endpoint</b> — sensitive data (SSN, IDs) is <b>not</b> routed through any third-party service.</li>
+    <li>Supports the credit union's <b>BSA / Beneficial Ownership (31 CFR §1010.230)</b> and <b>USA PATRIOT Act</b> obligations; consent, verification, and e-sign audit language are built in.</li>
+    <li>Until connected, the live form runs in a <b>safe review mode</b> that transmits nothing — safe to circulate for review today.</li>
+  </ul>
+
+  <h2><span class="n">4</span>Status &amp; Access</h2>
+  <div class="status">
+    <div class="row"><span>Both forms (simple + full) built</span><span class="ok">✔ Complete</span></div>
+    <div class="row"><span>Document upload + camera capture</span><span class="ok">✔ Complete</span></div>
+    <div class="row"><span>E-signature (draw/type + audit)</span><span class="ok">✔ Complete</span></div>
+    <div class="row"><span>Brand match (logo + colors)</span><span class="ok">✔ Complete</span></div>
+    <div class="row"><span>Live preview link + standalone file</span><span class="ok">✔ Delivered</span></div>
+    <div class="row"><span>Connect to HHFCU backend endpoint</span><span class="pend">◔ Pending (CU IT)</span></div>
+  </div>
+  <p class="links" style="margin-top:6px"><b>Live preview:</b> <a>https://nubridgemd1.github.io/hhfcu-intake/</a> &nbsp;|&nbsp; <b>Developer spec:</b> BACKEND-INTEGRATION.md (in the delivery package)</p>
+
+  <h2><span class="n">5</span>To Go Live</h2>
+  <div class="next">
+    <b>One step remains:</b> the credit union's web/IT team hosts the page on its own site (or embeds it) and sets a single configuration line — the secure <b>submit endpoint</b> that receives the application and files. A copy-paste developer specification (field names, file parts, sample server code, security requirements) has been provided. No other changes are required; hosting and HTTPS are already in place on the credit union's website.
+  </div>
+
+  <footer>
+    <span>Heritage Hub Federal Credit Union — Digital Membership Intake</span>
+    <span>Confidential — Executive Summary</span>
+  </footer>
+</div>
+</body>
+</html>

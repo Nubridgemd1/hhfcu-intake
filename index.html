@@ -484,8 +484,9 @@ footer.hh{max-width:920px;margin:0 auto;padding:8px 16px 40px;color:var(--muted)
 <script>
 /* ============================================================
    CONFIG — the ONLY integration point.
-   Point submitEndpoint at HHFCU's secure HTTPS backend that accepts
-   multipart/form-data (fields + files). Until it is set, the form runs
+   Point submitEndpoint at HHFCU's HTTPS endpoint (a Google Apps Script Web App
+   or your own backend) that accepts a JSON POST: { application:{...fields},
+   documents:[{box,label,filename,mimeType,size,contentBase64}] }. Until it is set, the form runs
    in safe "review mode": it validates and assembles the application and
    lets the applicant download a summary, but transmits nothing.
    ============================================================ */
@@ -813,8 +814,8 @@ function validate(){
 /* ============================================================
    COLLECT + SUBMIT
    ============================================================ */
-function collect(){
-  const fd=new FormData();
+function fileToB64(file){return new Promise(function(resolve){var r=new FileReader();r.onload=function(){resolve(String(r.result).split(',')[1]||'');};r.onerror=function(){resolve('');};r.readAsDataURL(file);});}
+async function collect(){
   const data={ _meta:{ org:CFG.orgName, formScope:SCOPE, submittedAt:new Date().toISOString(), userAgent:navigator.userAgent } };
   $$('#intakeForm input,#intakeForm select,#intakeForm textarea').forEach(el=>{
     if(el.type==='file') return;
@@ -834,39 +835,43 @@ function collect(){
         agreement: !!(document.querySelector('[name=agree]')||{}).checked,
         signature_adoption: !!(document.querySelector('[name=esign_adopt]')||{}).checked
       },
-      signerName: (document.querySelector('[name=sign_name]')||{}).value || null,
-      userAgent: navigator.userAgent,
-      note: 'Signer IP address and authoritative server timestamp should be recorded by the HHFCU backend on receipt.'
+      signerName: (document.querySelector('[name=sign_name]')||{}).value || null
     };
   }
-  // fields
-  fd.append('application', JSON.stringify(data));
-  // also flatten simple scalar fields for backends that prefer flat form fields
-  Object.entries(data).forEach(([k,v])=>{ if(typeof v==='string') fd.append(k,v); });
-  // files
-  let fileCount=0;
-  DOC_BOXES.forEach(b=>{ FILES[b.key].filter(f=>!f.bad).forEach((f,i)=>{ fd.append(`doc_${b.key}`, f.file, f.file.name); fileCount++; }); });
-  return {fd,data,fileCount};
+  // files -> base64 (JSON-safe, works with any backend incl. Google Apps Script)
+  const documents=[]; let fileCount=0;
+  for(let bi=0; bi<DOC_BOXES.length; bi++){
+    const b=DOC_BOXES[bi];
+    const list=FILES[b.key].filter(f=>!f.bad);
+    for(let fi=0; fi<list.length; fi++){
+      const f=list[fi];
+      documents.push({ box:b.key, label:b.label, filename:f.file.name, mimeType:f.file.type||'application/octet-stream', size:f.file.size, contentBase64: await fileToB64(f.file) });
+      fileCount++;
+    }
+  }
+  return { payload:{ application:data, documents:documents }, data, fileCount };
 }
 
 async function doSubmit(){
   const v=validate();
   if(!v.ok){ toast('err','Please complete the highlighted items: '+(v.problems.join(', ')||'required fields')+'.'); return; }
-  const {fd,data,fileCount}=collect();
+  const btn=$('#submitBtn'); btn.disabled=true; btn.textContent='Preparing files...';
+  const {payload,data,fileCount}=await collect();
 
   if(!CFG.submitEndpoint){
-    // SAFE REVIEW MODE — transmit nothing
-    reviewModal(data,fileCount);
+    btn.disabled=false; btn.textContent='Submit Application';
+    reviewModal(data,fileCount); // SAFE REVIEW MODE - transmit nothing
     return;
   }
-  const btn=$('#submitBtn'); btn.disabled=true; btn.textContent='Submitting…';
+  btn.textContent='Submitting...';
   try{
-    const res=await fetch(CFG.submitEndpoint,{ method:CFG.submitMethod||'POST', body:fd, headers:CFG.extraHeaders||{} });
-    if(!res.ok) throw new Error('Server responded '+res.status);
+    // text/plain keeps this a simple request (no CORS preflight); no-cors lets it reach
+    // cross-origin endpoints such as a Google Apps Script Web App.
+    await fetch(CFG.submitEndpoint,{ method:CFG.submitMethod||'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload) });
     toast('ok','Application submitted to Heritage Hub FCU. A representative will follow up. Reference the business name and email you provided.');
     window.scrollTo({top:0,behavior:'smooth'});
   }catch(err){
-    toast('err','We could not submit right now ('+err.message+'). Please try again, or contact 832-941-9122.');
+    toast('err','We could not submit right now. Please check your connection and try again, or contact 832-941-9122.');
   }finally{
     btn.disabled=false; btn.textContent='Submit Application';
   }
