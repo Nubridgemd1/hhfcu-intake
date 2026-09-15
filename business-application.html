@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Open a Business Account — Heritage Hub FCU</title>
+<meta name="description" content="Heritage Hub Federal Credit Union — secure business & personal membership intake form with document upload." />
+<link rel="icon" href="hhfcu-favicon.jpg" />
+<style>
+/* ============================================================
+   HHFCU INTAKE — self-contained, no external dependencies.
+   ============================================================ */
+:root{
+  --navy:#0a4a78; --navy-2:#0070ba; --navy-3:#06304f;
+  --gold:#0070ba; --gold-2:#005a94;
+  --ink:#1f2733; --muted:#5b6675; --line:#d7dde6;
+  --bg:#eef1f5; --card:#ffffff; --field:#f5f7fa;
+  --danger:#b3261e; --danger-bg:#fdecea; --ok:#1b7a43; --ok-bg:#e9f5ee;
+  --radius:10px; --shadow:0 1px 3px rgba(18,40,76,.08),0 6px 20px rgba(18,40,76,.06);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#ffffff;color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5}
+img{max-width:100%}
+a{color:var(--navy-2)}
+
+/* ---------- Header ---------- */
+header.hh{background:linear-gradient(180deg,var(--navy) 0%,var(--navy-3) 100%);color:#fff;border-bottom:4px solid var(--gold)}
+.hh-inner{max-width:920px;margin:0 auto;padding:18px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.crest{flex:0 0 auto;width:58px;height:58px}
+.hh-title{flex:1 1 auto;min-width:200px}
+.hh-title h1{margin:0;font-family:var(--serif);font-size:1.32rem;letter-spacing:.5px;line-height:1.15}
+.hh-title .fcu{color:#9fd0f5;font-weight:700;letter-spacing:2px;font-size:.74rem;text-transform:uppercase;margin-top:2px}
+.hh-logo{height:52px;width:auto;flex:0 0 auto}
+@media(max-width:520px){.hh-logo{height:42px}}
+.hh-title .addr{color:#cdd6e4;font-size:.78rem;margin-top:4px}
+.hh-badge{flex:0 0 auto;text-align:right;font-size:.7rem;color:#cdd6e4;line-height:1.4}
+.hh-badge strong{color:#fff;display:block;font-size:.78rem}
+
+/* ---------- Layout ---------- */
+main{max-width:960px;margin:0 auto;padding:14px 16px 28px}
+.intro{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:var(--radius);padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow);font-size:.92rem;color:var(--muted)}
+.intro strong{color:var(--ink)}
+
+/* ---------- Scope toggle ---------- */
+.scope-bar{position:sticky;top:0;z-index:40;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;margin-bottom:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.scope-bar .lbl{font-weight:700;color:var(--navy);font-size:.9rem}
+.seg{display:inline-flex;background:var(--field);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:.86rem;font-weight:600;padding:8px 16px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.scope-hint{font-size:.8rem;color:var(--muted);flex:1 1 100%}
+
+/* ---------- Cards / sections ---------- */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin:0 0 18px;overflow:hidden;border:0;padding:0}
+.card > legend, .card .sec-head{display:block;width:100%;background:var(--navy);color:#fff;padding:12px 18px;font-weight:700;font-size:.98rem;letter-spacing:.3px}
+.card .sec-head .num{color:#9fd0f5;font-weight:800;margin-right:8px}
+.card > legend .num, legend .num{color:#9fd0f5;font-weight:800;margin-right:8px}
+.card .sec-body{padding:18px}
+.note{background:#eef6fc;border-left:3px solid var(--navy-2);padding:10px 12px;border-radius:6px;font-size:.82rem;color:#385267;margin:0 0 16px}
+.subhead{font-weight:700;color:var(--navy);border-bottom:2px solid var(--line);padding-bottom:6px;margin:22px 0 14px;font-size:.95rem;display:flex;align-items:center;gap:8px}
+.subhead:first-child{margin-top:0}
+
+/* ---------- Grid + fields ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 16px}
+.grid.c3{grid-template-columns:1fr 1fr 1fr}
+.grid.c4{grid-template-columns:2fr 1fr 1fr 1fr}
+.col-span{grid-column:1/-1}
+@media(max-width:640px){.grid,.grid.c3,.grid.c4{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.field .req{color:var(--danger)}
+.field input,.field select,.field textarea{font:inherit;font-size:.95rem;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:11px 12px;width:100%;transition:border-color .15s,box-shadow .15s}
+.field textarea{min-height:84px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--navy-2);box-shadow:0 0 0 3px rgba(28,53,94,.15);background:#fff}
+.field input.invalid,.field select.invalid,.field textarea.invalid{border-color:var(--danger);background:var(--danger-bg)}
+.field .err{color:var(--danger);font-size:.74rem;display:none}
+.field.show-err .err{display:block}
+.hint{font-size:.74rem;color:var(--muted)}
+
+/* checkbox / radio groups */
+.checks{display:flex;flex-wrap:wrap;gap:8px 18px}
+.check{display:flex;align-items:flex-start;gap:8px;font-size:.9rem;color:var(--ink);cursor:pointer;padding:6px 0}
+.check input{width:18px;height:18px;margin-top:1px;accent-color:var(--navy);flex:0 0 auto}
+.check.box{background:var(--field);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.inline-other{display:flex;align-items:center;gap:8px;flex:1 1 220px}
+.inline-other input{flex:1}
+
+/* repeatable blocks */
+.block{border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px;background:#fff}
+.block-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.block-head h4{margin:0;color:var(--navy);font-size:.95rem}
+.btn-ghost{background:transparent;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:7px 12px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer}
+.btn-ghost:hover{border-color:var(--navy-2);color:var(--navy)}
+.btn-remove{color:var(--danger);border-color:#f0c9c6}
+.add-row{margin:2px 0 4px}
+.btn-add{background:var(--field);border:1px dashed var(--navy-2);color:var(--navy);border-radius:8px;padding:10px 14px;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer;width:100%}
+.btn-add:hover{background:#eaf0f8}
+.btn-add[disabled]{opacity:.5;cursor:not-allowed}
+
+/* ---------- Document upload ---------- */
+.docgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:640px){.docgrid{grid-template-columns:1fr}}
+.dropzone{border:1.5px dashed var(--line);border-radius:10px;background:var(--field);padding:14px;display:flex;flex-direction:column;gap:10px}
+.dropzone.req-box{border-color:#7fb8e0}
+.dropzone.dragover{border-color:var(--navy-2);background:#eaf0f8}
+.dz-title{font-weight:700;color:var(--navy);font-size:.9rem;display:flex;align-items:center;gap:6px}
+.dz-title .req{color:var(--danger)}
+.dz-hint{font-size:.76rem;color:var(--muted);margin-top:-4px}
+.dz-btns{display:flex;gap:8px;flex-wrap:wrap}
+.dz-btn{flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:11px 10px;font:inherit;font-size:.85rem;font-weight:600;color:var(--navy);cursor:pointer;min-height:44px}
+.dz-btn:hover{border-color:var(--navy-2);background:#f3f7fc}
+.dz-btn svg{width:18px;height:18px;flex:0 0 auto}
+.dz-btn.cam{color:var(--gold-2)}
+.dz-files{display:flex;flex-direction:column;gap:8px}
+.dz-file{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.dz-thumb{width:38px;height:38px;border-radius:6px;object-fit:cover;flex:0 0 auto;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:700;text-transform:uppercase;overflow:hidden}
+.dz-meta{flex:1;min-width:0}
+.dz-name{font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dz-size{font-size:.72rem;color:var(--muted)}
+.dz-x{flex:0 0 auto;border:0;background:transparent;color:var(--danger);cursor:pointer;font-size:1.1rem;line-height:1;padding:6px}
+.dz-file.bad{border-color:var(--danger);background:var(--danger-bg)}
+
+/* signature */
+.sig-wrap{display:flex;flex-direction:column;gap:8px}
+.sig-pad{border:1px solid var(--line);border-radius:8px;background:#fff;touch-action:none;width:100%;height:140px;display:block}
+.sig-tools{display:flex;gap:8px;align-items:center}
+
+/* ---------- Submit bar ---------- */
+.submitbar{position:sticky;bottom:0;background:rgba(255,255,255,.97);backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-top:8px;z-index:50}
+.submitbar-inner{max-width:920px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.progress{flex:1 1 200px;min-width:160px}
+.progress .bar{height:8px;background:var(--field);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.progress .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#0a4a78,#29a3ff);transition:width .3s}
+.progress .txt{font-size:.74rem;color:var(--muted);margin-top:4px}
+.btn-submit{background:var(--navy);color:#fff;border:0;border-radius:9px;padding:14px 26px;font:inherit;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(18,40,76,.25)}
+.btn-submit:hover{background:var(--navy-2)}
+.btn-submit[disabled]{opacity:.6;cursor:wait}
+
+/* messages */
+.banner{padding:14px 16px;border-radius:10px;margin-bottom:18px;font-size:.9rem;display:none}
+.banner.err{background:var(--danger-bg);border:1px solid #f0c9c6;color:#7a1a15}
+.banner.ok{background:var(--ok-bg);border:1px solid #bfe2cd;color:#14532d}
+.banner.warn{background:#fbf7ec;border:1px solid #e6d3a0;color:#6b5b32}
+.banner.show{display:block}
+.secure-chip{display:inline-flex;align-items:center;gap:6px;font-size:.76rem;color:var(--muted);font-weight:600}
+.secure-chip svg{width:15px;height:15px}
+
+footer.hh{max-width:920px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);font-size:.76rem;text-align:center}
+
+/* review modal */
+.overlay{position:fixed;inset:0;background:rgba(13,30,58,.55);z-index:100;display:none;align-items:flex-start;justify-content:center;padding:24px 14px;overflow:auto}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:12px;max-width:640px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal-head{background:var(--navy);color:#fff;padding:14px 18px;border-radius:12px 12px 0 0;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.modal-head button{background:transparent;border:0;color:#fff;font-size:1.4rem;cursor:pointer;line-height:1}
+.modal-body{padding:18px;max-height:60vh;overflow:auto;font-size:.86rem}
+.modal-body pre{background:var(--field);border:1px solid var(--line);border-radius:8px;padding:12px;white-space:pre-wrap;word-break:break-word;font-size:.78rem}
+.modal-foot{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+[hidden]{display:none!important}
+  .page-title{margin:2px 0 16px}
+  .page-title h1{margin:0 0 6px;font-family:var(--serif);color:var(--navy);font-size:1.55rem;letter-spacing:.3px;line-height:1.15}
+  .page-title p{margin:0;color:var(--muted);font-size:.92rem;max-width:70ch}
+  /* embed: keep the review modal visible within the iframe viewport */
+  .overlay{position:absolute}
+</style>
+</head>
+<body>
+<main>
+  <div class="page-title">
+    <h1>Open a Business Account</h1>
+    <p>Apply online in minutes. Choose <strong>Simple (single owner)</strong> or <strong>Full business (BSA)</strong> below — these replace the printable <em>Single-Owner</em> and <em>Multiple-Owner</em> applications. Upload documents from your phone, camera, or computer (any file type). Fields marked <span style="color:var(--danger)">*</span> are required.</p>
+  </div>
+<!-- Scope toggle -->
+  <div class="scope-bar">
+    <span class="lbl">Application type:</span>
+    <div class="seg" role="group" aria-label="Application type">
+      <button type="button" id="scopeSimple" aria-pressed="true" onclick="setScope('simple')">Simple (single owner)</button>
+      <button type="button" id="scopeFull" aria-pressed="false" onclick="setScope('full')">Full business (BSA)</button>
+    </div>
+    <span class="scope-hint" id="scopeHint">Simple: quick single-owner membership. Switch to Full for multi-owner entities requiring beneficial-ownership &amp; BSA details.</span>
+  </div>
+
+  <div class="banner err" id="bannerErr"></div>
+  <div class="banner ok" id="bannerOk"></div>
+  <div class="banner warn" id="bannerWarn"></div>
+
+  <form id="intakeForm" novalidate>
+
+    <!-- SECTION 1 — BUSINESS INFORMATION -->
+    <fieldset class="card">
+      <legend><span class="num">1</span>Business Information <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="grid">
+          <div class="field col-span"><label>Legal Business Name <span class="req">*</span></label><input name="legal_business_name" data-req /><span class="err">Required</span></div>
+          <div class="field"><label>DBA / Trade Name (if any)</label><input name="dba_name" /></div>
+          <div class="field"><label>Federal Tax ID (EIN) <span class="req">*</span></label><input name="ein" data-req data-mask="ein" placeholder="12-3456789" inputmode="numeric" /><span class="err">Required</span></div>
+          <div class="field"><label>Date Established (MM/YYYY) <span class="req">*</span></label><input name="date_established" data-req placeholder="MM/YYYY" inputmode="numeric" /><span class="err">Required</span></div>
+          <div class="field scope-full"><label>State of Formation</label><input name="state_formation" /></div>
+        </div>
+
+        <div class="subhead scope-full">Entity Type <span class="req">*</span></div>
+        <div class="checks scope-full" data-radiogroup="entity_type">
+          <label class="check box"><input type="radio" name="entity_type" value="Sole Proprietorship">Sole Proprietorship</label>
+          <label class="check box"><input type="radio" name="entity_type" value="Single-Member LLC">Single-Member LLC</label>
+          <label class="check box"><input type="radio" name="entity_type" value="Multi-Member LLC">Multi-Member LLC</label>
+          <label class="check box"><input type="radio" name="entity_type" value="Partnership">Partnership</label>
+          <label class="check box"><input type="radio" name="entity_type" value="S-Corporation">S-Corporation</label>
+          <label class="check box"><input type="radio" name="entity_type" value="C-Corporation">C-Corporation</label>
+          <label class="check box"><input type="radio" name="entity_type" value="Non-Profit 501(c)">Non-Profit 501(c)</label>
+          <label class="check box inline-other"><input type="radio" name="entity_type" value="__other__"><span>Other:</span><input type="text" name="entity_type_other" aria-label="Other entity type"></label>
+        </div>
+
+        <div class="subhead">Business Address</div>
+        <div class="grid c3">
+          <div class="field col-span"><label>Physical Address (no P.O. Box) <span class="req">*</span></label><input name="phys_address" data-req /><span class="err">Required</span></div>
+          <div class="field"><label>City <span class="req">*</span></label><input name="phys_city" data-req /><span class="err">Required</span></div>
+          <div class="field"><label>State <span class="req">*</span></label><input name="phys_state" data-req maxlength="20" /><span class="err">Required</span></div>
+          <div class="field"><label>ZIP <span class="req">*</span></label><input name="phys_zip" data-req inputmode="numeric" /><span class="err">Required</span></div>
+        </div>
+        <div class="grid c3 scope-full">
+          <div class="field col-span"><label>Mailing Address (if different)</label><input name="mail_address" /></div>
+          <div class="field"><label>City</label><input name="mail_city" /></div>
+          <div class="field"><label>State</label><input name="mail_state" /></div>
+          <div class="field"><label>ZIP</label><input name="mail_zip" /></div>
+        </div>
+        <div class="grid c3">
+          <div class="field"><label>Business Phone <span class="req">*</span></label><input name="biz_phone" data-req data-mask="phone" inputmode="tel" placeholder="(281) 000-0000" /><span class="err">Required</span></div>
+          <div class="field"><label>Business Email <span class="req">*</span></label><input name="biz_email" data-req type="email" inputmode="email" /><span class="err">Valid email required</span></div>
+          <div class="field"><label>Website (if any)</label><input name="website" inputmode="url" /></div>
+        </div>
+        <div class="grid">
+          <div class="field scope-full"><label>NAICS Code (if known)</label><input name="naics" inputmode="numeric" /></div>
+          <div class="field col-span"><label>Primary Business Purpose / Nature of Business <span class="req">*</span></label><textarea name="business_purpose" data-req></textarea><span class="err">Required</span></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 2 — ANTICIPATED ACCOUNT ACTIVITY (FULL) -->
+    <fieldset class="card scope-full">
+      <legend><span class="num">2</span>Anticipated Account Activity <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="note">Required by the Bank Secrecy Act (31 CFR Chapter X) to assess risk. Held in strict confidence.</div>
+        <div class="grid">
+          <div class="field"><label>Estimated Monthly Deposits ($)</label><input name="est_deposits" data-mask="money" inputmode="decimal" /></div>
+          <div class="field"><label>Estimated Monthly Withdrawals ($)</label><input name="est_withdrawals" data-mask="money" inputmode="decimal" /></div>
+          <div class="field"><label>Avg. # of Transactions / Month</label><input name="avg_txn" inputmode="numeric" /></div>
+          <div class="field"><label>Typical Largest Single Transaction ($)</label><input name="largest_txn" data-mask="money" inputmode="decimal" /></div>
+        </div>
+        <div class="subhead">Will the business conduct any of the following?</div>
+        <div class="checks">
+          <label class="check box"><input type="checkbox" name="activity" value="Cash deposits over $10,000/month">Cash deposits over $10,000 in a month</label>
+          <label class="check box"><input type="checkbox" name="activity" value="International wire transfers">International wire transfers</label>
+          <label class="check box"><input type="checkbox" name="activity" value="ATM/ITM cash deposits">ATM/ITM cash deposits</label>
+          <label class="check box"><input type="checkbox" name="activity" value="Remote deposit capture">Remote deposit capture</label>
+          <label class="check box"><input type="checkbox" name="activity" value="Merchant card processing">Merchant card processing</label>
+          <label class="check box"><input type="checkbox" name="activity" value="None of the above">None of the above</label>
+        </div>
+        <div class="subhead">Source of Initial Deposit <span class="req">*</span></div>
+        <div class="checks" data-radiogroup="deposit_source">
+          <label class="check box"><input type="radio" name="deposit_source" value="Business operations">Business operations</label>
+          <label class="check box"><input type="radio" name="deposit_source" value="Owner contribution">Owner contribution</label>
+          <label class="check box"><input type="radio" name="deposit_source" value="Loan proceeds">Loan proceeds</label>
+          <label class="check box"><input type="radio" name="deposit_source" value="Investor funding">Investor funding</label>
+          <label class="check box inline-other"><input type="radio" name="deposit_source" value="__other__"><span>Other:</span><input type="text" name="deposit_source_other" aria-label="Other source"></label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 3 — OWNERS -->
+    <fieldset class="card">
+      <legend><span class="num">3</span><span data-scope-label="owners-title">Owner Information</span> <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="note scope-full">Federal regulation (31 CFR § 1010.230) requires identifying every individual owning 25%+ of the entity, plus one individual with significant managerial control. List all qualifying owners (up to four).</div>
+        <div id="owners"></div>
+        <div class="add-row scope-full"><button type="button" class="btn-add" id="addOwner">+ Add another owner (up to 4)</button></div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 4 — CONTROL PERSON (FULL) -->
+    <fieldset class="card scope-full">
+      <legend><span class="num">4</span>Control Person <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="note">The individual with significant responsibility to manage or direct the entity (e.g., CEO, Managing Member, Treasurer).</div>
+        <label class="check box" style="margin-bottom:12px"><input type="checkbox" id="ctrlSame" name="control_same"> Same as Beneficial Owner
+          <select name="control_same_num" id="ctrlSameNum" style="margin-left:8px;width:auto;padding:6px 8px;border-radius:6px;border:1px solid var(--line)">
+            <option value="1">#1</option><option value="2">#2</option><option value="3">#3</option><option value="4">#4</option>
+          </select>
+        </label>
+        <div id="ctrlFields">
+          <div class="grid">
+            <div class="field"><label>Full Legal Name</label><input name="ctrl_name"></div>
+            <div class="field"><label>Title / Position</label><input name="ctrl_title"></div>
+            <div class="field"><label>Date of Birth (MM/DD/YYYY)</label><input name="ctrl_dob" data-mask="date" placeholder="MM/DD/YYYY" inputmode="numeric"></div>
+            <div class="field"><label>SSN / ITIN</label><input name="ctrl_ssn" data-mask="ssn" placeholder="000-00-0000" inputmode="numeric"></div>
+            <div class="field col-span"><label>Residential Address</label><input name="ctrl_address"></div>
+            <div class="field"><label>City</label><input name="ctrl_city"></div>
+            <div class="field"><label>State</label><input name="ctrl_state"></div>
+            <div class="field"><label>ZIP</label><input name="ctrl_zip"></div>
+            <div class="field"><label>Phone</label><input name="ctrl_phone" data-mask="phone"></div>
+            <div class="field"><label>Email</label><input name="ctrl_email" type="email"></div>
+            <div class="field"><label>ID Type</label><input name="ctrl_id_type"></div>
+            <div class="field"><label>ID Number</label><input name="ctrl_id_num"></div>
+            <div class="field"><label>Issuing State / Country</label><input name="ctrl_id_issuer"></div>
+            <div class="field"><label>Expiration Date</label><input name="ctrl_id_exp" data-mask="date" placeholder="MM/DD/YYYY"></div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 5 — AUTHORIZED SIGNERS (FULL) -->
+    <fieldset class="card scope-full">
+      <legend><span class="num">5</span>Authorized Signers</legend>
+      <div class="sec-body">
+        <div class="note">Individuals authorized to transact on the account. Each signer must be a member or eligible to become one. Attach an authorizing resolution if signers aren't in the formation documents.</div>
+        <div id="signers"></div>
+        <div class="add-row"><button type="button" class="btn-add" id="addSigner">+ Add authorized signer (up to 3)</button></div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 6 — MEMBERSHIP ELIGIBILITY -->
+    <fieldset class="card">
+      <legend><span class="num">6</span>Membership Eligibility <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="hint" style="margin-bottom:10px">How does the applicant qualify for membership in Heritage Hub FCU? (Check all that apply.)</div>
+        <div class="checks">
+          <label class="check box"><input type="checkbox" name="eligibility" value="Located in HHFCU field of membership">Located in HHFCU's field of membership</label>
+          <label class="check box"><input type="checkbox" name="eligibility" value="Live">Live</label>
+          <label class="check box"><input type="checkbox" name="eligibility" value="Work">Work</label>
+          <label class="check box"><input type="checkbox" name="eligibility" value="Worship">Worship</label>
+          <label class="check box"><input type="checkbox" name="eligibility" value="School">Attend school</label>
+          <label class="check box"><input type="checkbox" name="eligibility" value="Business">Business</label>
+          <label class="check box"><input type="checkbox" name="eligibility" value="Volunteer">Volunteer</label>
+        </div>
+        <div class="grid" style="margin-top:12px">
+          <div class="field scope-full"><label>Select Employer Group (SEG), if any</label><input name="seg"></div>
+          <div class="field scope-full"><label>Immediate family/household member of existing member (name)</label><input name="family_member"></div>
+          <div class="field col-span"><label>Other (explain)</label><input name="eligibility_other"></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 7 — ACCOUNT SELECTION -->
+    <fieldset class="card">
+      <legend><span class="num">7</span>Account Selection <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="checks" style="flex-direction:column">
+          <label class="check box"><input type="checkbox" name="accounts" value="Business Share Savings"><strong>Share Savings</strong> — required to establish membership ($5 minimum par value)</label>
+          <label class="check box"><input type="checkbox" name="accounts" value="Share Draft (Checking)"><strong>Share Draft (Checking)</strong></label>
+          <label class="check box"><input type="checkbox" name="accounts" value="Money Market"><strong>Money Market</strong></label>
+          <label class="check box"><input type="checkbox" name="accounts" value="Certificate of Deposit"><strong>Certificate of Deposit (CD)</strong></label>
+        </div>
+        <div class="grid c3 scope-full" style="margin-top:12px">
+          <div class="field"><label>CD Term (months)</label><input name="cd_term" inputmode="numeric"></div>
+          <div class="field"><label>CD Amount ($)</label><input name="cd_amount" data-mask="money"></div>
+          <div class="field"><label>Other account</label><input name="account_other"></div>
+        </div>
+        <div class="subhead">Initial Deposits</div>
+        <div class="grid c4">
+          <div class="field"><label>Membership Fee (Par)</label><input name="fee_par" data-mask="money" value="5.00"></div>
+          <div class="field"><label>Initial Savings ($)</label><input name="dep_savings" data-mask="money"></div>
+          <div class="field"><label>Initial Checking ($)</label><input name="dep_checking" data-mask="money"></div>
+          <div class="field"><label>Initial CD / MM ($)</label><input name="dep_cdmm" data-mask="money"></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 8 — BENEFICIARY (optional) -->
+    <fieldset class="card">
+      <legend><span class="num">8</span>Beneficiary Designation (Payable on Death) — optional</legend>
+      <div class="sec-body">
+        <div class="note">Optional. Applies to accounts permitting POD designation. Total share percentages must equal 100%.</div>
+        <div id="beneficiaries"></div>
+        <div class="add-row scope-full"><button type="button" class="btn-add" id="addBene">+ Add beneficiary (up to 2)</button></div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 9 — DOCUMENT UPLOAD -->
+    <fieldset class="card">
+      <legend><span class="num">9</span>Document Upload <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="note">Upload from your phone, camera, or computer. <strong>Any file type is accepted</strong> (PDF, HEIC, JPG, PNG, Word, etc.). You can add multiple files per box. Max <span id="maxMbLabel">25</span> MB per file.</div>
+        <div class="docgrid" id="docGrid"></div>
+      </div>
+    </fieldset>
+
+    <!-- SECTION 10 — DISCLOSURES & SIGNATURE -->
+    <fieldset class="card">
+      <legend><span class="num">10</span>Disclosures, Consents &amp; Signature <span class="req">*</span></legend>
+      <div class="sec-body">
+        <div class="subhead">USA PATRIOT Act Notice</div>
+        <p class="hint">To help the government fight the funding of terrorism and money laundering, federal law requires all financial institutions to obtain, verify, and record information identifying each person and entity that opens an account. We may ask to see identifying documents.</p>
+
+        <div class="scope-full">
+          <div class="subhead">Certification of Beneficial Ownership</div>
+          <p class="hint">I certify that the information provided in the Owners and Control Person sections is complete and correct, and I will notify Heritage Hub FCU of any change in beneficial ownership or control within 30 days.</p>
+        </div>
+
+        <div class="subhead">Consent to Verify Information</div>
+        <p class="hint">I authorize Heritage Hub FCU to verify the information in this application, including obtaining consumer and business credit reports on the entity, owners, control person, and authorized signers, and to share information with affiliates and service providers as permitted by law (15 U.S.C. § 1681).</p>
+
+        <label class="check box" style="margin:8px 0"><input type="checkbox" name="esign_consent" data-req-check> <span><strong>Electronic Communications Consent (E-SIGN)</strong> <span class="req">*</span> — I consent to receive disclosures, statements, and notices electronically per the federal E-SIGN Act. I may withdraw consent at any time by contacting the Credit Union.</span></label>
+
+        <div class="subhead">Agreement</div>
+        <p class="hint">I hereby apply for membership in Heritage Hub Federal Credit Union and agree to be bound by its bylaws, Membership and Account Agreement, Truth-in-Savings disclosures, Funds Availability Policy, Privacy Notice, and Fee Schedule, as amended. I certify that all information provided is true, complete, and correct, and that I am duly authorized to bind the business.</p>
+
+        <label class="check box" style="margin:8px 0"><input type="checkbox" name="agree" data-req-check> <span>I have read and agree to the statements above. <span class="req">*</span></span></label>
+
+        <div class="grid c3">
+          <div class="field"><label>Authorized Signer Name (printed) <span class="req">*</span></label><input name="sign_name" data-req><span class="err">Required</span></div>
+          <div class="field"><label>Title <span class="req">*</span></label><input name="sign_title" data-req><span class="err">Required</span></div>
+          <div class="field"><label>Date <span class="req">*</span></label><input name="sign_date" data-req data-mask="date" placeholder="MM/DD/YYYY"><span class="err">Required</span></div>
+        </div>
+
+        <div class="subhead" style="margin-top:14px">Electronic Signature <span class="req">*</span></div>
+        <label class="check box" style="margin:0 0 10px"><input type="checkbox" name="esign_adopt" data-req-check> <span>By checking this box and signing below, I adopt the signature as my <strong>electronic signature</strong> and agree it is the legal equivalent of my handwritten signature under the federal E-SIGN Act and UETA. <span class="req">*</span></span></label>
+        <div class="seg" role="group" aria-label="Signature mode" style="margin-bottom:10px">
+          <button type="button" id="sigModeDraw" aria-pressed="true" onclick="setSigMode('draw')">✍️ Draw</button>
+          <button type="button" id="sigModeType" aria-pressed="false" onclick="setSigMode('type')">⌨️ Type</button>
+        </div>
+        <div id="sigTypeWrap" class="field" hidden style="margin-bottom:10px">
+          <label>Type your full legal name</label>
+          <input id="sigTypeInput" placeholder="e.g., Jane A. Doe" autocomplete="off">
+        </div>
+        <div class="field">
+          <div class="sig-wrap">
+            <canvas id="sigPad" class="sig-pad" aria-label="Signature area"></canvas>
+            <div class="sig-tools">
+              <button type="button" class="btn-ghost" id="sigClear">Clear</button>
+              <span class="hint" id="sigStatus">Not signed yet</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+
+  </main>
+
+<!-- Submit bar -->
+<div class="submitbar">
+  <div class="submitbar-inner">
+    <div class="progress">
+      <div class="bar"><i id="progFill"></i></div>
+      <div class="txt" id="progTxt">0% complete</div>
+    </div>
+    <span class="secure-chip">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      Secure
+    </span>
+    <button type="button" class="btn-submit" id="submitBtn">Submit Application</button>
+  </div>
+</div>
+
+<!-- Review / status modal -->
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head"><span id="modalTitle">Review</span><button type="button" onclick="closeModal()" aria-label="Close">×</button></div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot" id="modalFoot"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG — the ONLY integration point.
+   Point submitEndpoint at HHFCU's HTTPS endpoint (a Google Apps Script Web App
+   or your own backend) that accepts a JSON POST: { application:{...fields},
+   documents:[{box,label,filename,mimeType,size,contentBase64}] }. Until it is set, the form runs
+   in safe "review mode": it validates and assembles the application and
+   lets the applicant download a summary, but transmits nothing.
+   ============================================================ */
+window.HHFCU_CONFIG = {
+  submitEndpoint: "",            // e.g. "https://api.heritagehubfcu.org/intake"
+  submitMethod:   "POST",
+  extraHeaders:   {},            // e.g. { "x-api-key": "..." }  (avoid secrets in client code)
+  maxFileMB:      25,
+  maxFilesPerBox: 12,
+  orgName:        "Heritage Hub Federal Credit Union"
+};
+
+const CFG = window.HHFCU_CONFIG;
+document.getElementById('maxMbLabel').textContent = CFG.maxFileMB;
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+
+/* ---------- Scope toggle ---------- */
+let SCOPE = 'simple';
+function setScope(s){
+  SCOPE = s;
+  $('#scopeSimple').setAttribute('aria-pressed', s==='simple');
+  $('#scopeFull').setAttribute('aria-pressed', s==='full');
+  document.body.setAttribute('data-scope', s);
+  $$('.scope-full').forEach(el=>{ el.hidden = (s!=='full'); });
+  $('#scopeHint').textContent = s==='full'
+    ? 'Full business: multi-owner entities — includes BSA activity, beneficial owners, control person, and authorized signers.'
+    : 'Simple: quick single-owner membership. Switch to Full for multi-owner entities requiring beneficial-ownership & BSA details.';
+  $('[data-scope-label="owners-title"]').textContent = s==='full' ? 'Beneficial Owners & Control Person' : 'Owner / Director Information';
+  // owners: cap to 1 in simple
+  syncOwnersForScope();
+  updateProgress();
+}
+
+/* ---------- Repeatable: Owners ---------- */
+const OWNERS = $('#owners');
+function ownerBlock(n){
+  const div = document.createElement('div');
+  div.className='block owner-block';
+  div.dataset.n=n;
+  div.innerHTML = `
+    <div class="block-head"><h4 class="owner-title">Owner ${n}</h4>
+      <button type="button" class="btn-ghost btn-remove owner-remove" ${n===1?'hidden':''}>Remove</button></div>
+    <div class="grid">
+      <div class="field"><label>Full Legal Name <span class="req">*</span></label><input name="owner_name_${n}" ${n===1?'data-req':''}><span class="err">Required</span></div>
+      <div class="field"><label>Title / Position</label><input name="owner_title_${n}"></div>
+      <div class="field"><label>Date of Birth (MM/DD/YYYY) <span class="req">*</span></label><input name="owner_dob_${n}" ${n===1?'data-req':''} data-mask="date" placeholder="MM/DD/YYYY" inputmode="numeric"><span class="err">Required</span></div>
+      <div class="field"><label>SSN / ITIN <span class="req">*</span></label><input name="owner_ssn_${n}" ${n===1?'data-req':''} data-mask="ssn" placeholder="000-00-0000" inputmode="numeric"><span class="err">Required</span></div>
+      <div class="field scope-full"><label>Ownership %</label><input name="owner_pct_${n}" inputmode="numeric" placeholder="e.g. 100"></div>
+      <div class="field col-span"><label>Residential Address (no P.O. Box) <span class="req">*</span></label><input name="owner_addr_${n}" ${n===1?'data-req':''}><span class="err">Required</span></div>
+      <div class="field"><label>City</label><input name="owner_city_${n}"></div>
+      <div class="field"><label>State</label><input name="owner_state_${n}"></div>
+      <div class="field"><label>ZIP</label><input name="owner_zip_${n}" inputmode="numeric"></div>
+      <div class="field"><label>Phone</label><input name="owner_phone_${n}" data-mask="phone" inputmode="tel"></div>
+      <div class="field"><label>Email</label><input name="owner_email_${n}" type="email" inputmode="email"></div>
+      <div class="field"><label>ID Type (DL, Passport, etc.) <span class="req">*</span></label><input name="owner_id_type_${n}" ${n===1?'data-req':''}><span class="err">Required</span></div>
+      <div class="field"><label>ID Number <span class="req">*</span></label><input name="owner_id_num_${n}" ${n===1?'data-req':''}><span class="err">Required</span></div>
+      <div class="field"><label>Issuing State / Country</label><input name="owner_id_issuer_${n}"></div>
+      <div class="field"><label>Expiration Date</label><input name="owner_id_exp_${n}" data-mask="date" placeholder="MM/DD/YYYY"></div>
+    </div>`;
+  div.querySelector('.owner-remove').addEventListener('click',()=>{ div.remove(); renumberOwners(); updateProgress(); });
+  return div;
+}
+function renumberOwners(){
+  $$('.owner-block',OWNERS).forEach((b,i)=>{ b.querySelector('.owner-title').textContent = SCOPE==='full' ? `Beneficial Owner ${i+1}` : `Owner ${i+1}`; });
+  const count = $$('.owner-block',OWNERS).length;
+  $('#addOwner').disabled = count>=4;
+}
+function addOwner(){
+  const count = $$('.owner-block',OWNERS).length;
+  if(count>=4) return;
+  OWNERS.appendChild(ownerBlock(count+1));
+  renumberOwners();
+  applyMasks(); wireProgress();
+}
+function syncOwnersForScope(){
+  const blocks=$$('.owner-block',OWNERS);
+  if(SCOPE==='simple'){ blocks.slice(1).forEach(b=>b.remove()); }
+  renumberOwners();
+}
+OWNERS.appendChild(ownerBlock(1));
+$('#addOwner').addEventListener('click',()=>{ addOwner(); updateProgress(); });
+
+/* ---------- Repeatable: Signers ---------- */
+const SIGNERS=$('#signers');
+function signerBlock(n){
+  const div=document.createElement('div');
+  div.className='block signer-block';
+  div.innerHTML=`
+    <div class="block-head"><h4>Authorized Signer ${n}</h4>
+      <button type="button" class="btn-ghost btn-remove">Remove</button></div>
+    <div class="grid c3">
+      <div class="field"><label>Full Legal Name</label><input name="signer_name_${n}"></div>
+      <div class="field"><label>Title</label><input name="signer_title_${n}"></div>
+      <div class="field"><label>Phone</label><input name="signer_phone_${n}" data-mask="phone"></div>
+      <div class="field"><label>Date of Birth</label><input name="signer_dob_${n}" data-mask="date" placeholder="MM/DD/YYYY"></div>
+      <div class="field"><label>SSN / ITIN</label><input name="signer_ssn_${n}" data-mask="ssn" placeholder="000-00-0000"></div>
+      <div class="field"><label>Email</label><input name="signer_email_${n}" type="email"></div>
+    </div>`;
+  div.querySelector('.btn-remove').addEventListener('click',()=>{ div.remove(); renumberSigners(); });
+  return div;
+}
+function renumberSigners(){
+  $$('.signer-block',SIGNERS).forEach((b,i)=>b.querySelector('h4').textContent=`Authorized Signer ${i+1}`);
+  $('#addSigner').disabled = $$('.signer-block',SIGNERS).length>=3;
+}
+$('#addSigner').addEventListener('click',()=>{
+  if($$('.signer-block',SIGNERS).length>=3) return;
+  SIGNERS.appendChild(signerBlock($$('.signer-block',SIGNERS).length+1));
+  renumberSigners(); applyMasks();
+});
+SIGNERS.appendChild(signerBlock(1)); renumberSigners();
+
+/* ---------- Repeatable: Beneficiaries ---------- */
+const BENE=$('#beneficiaries');
+function beneBlock(n){
+  const div=document.createElement('div');
+  div.className='block bene-block';
+  div.innerHTML=`
+    <div class="block-head"><h4>Beneficiary ${n}</h4>
+      <button type="button" class="btn-ghost btn-remove" ${n===1?'hidden':''}>Remove</button></div>
+    <div class="grid c3">
+      <div class="field"><label>Full Legal Name</label><input name="bene_name_${n}"></div>
+      <div class="field"><label>Relationship</label><input name="bene_rel_${n}"></div>
+      <div class="field"><label>Share %</label><input name="bene_pct_${n}" inputmode="numeric"></div>
+      <div class="field"><label>Date of Birth</label><input name="bene_dob_${n}" data-mask="date" placeholder="MM/DD/YYYY"></div>
+      <div class="field"><label>SSN (optional)</label><input name="bene_ssn_${n}" data-mask="ssn"></div>
+      <div class="field"><label>Phone</label><input name="bene_phone_${n}" data-mask="phone"></div>
+    </div>`;
+  const rm=div.querySelector('.btn-remove'); if(rm) rm.addEventListener('click',()=>{div.remove(); renumberBene();});
+  return div;
+}
+function renumberBene(){
+  $$('.bene-block',BENE).forEach((b,i)=>b.querySelector('h4').textContent=`Beneficiary ${i+1}`);
+  $('#addBene').disabled = $$('.bene-block',BENE).length>=2;
+}
+$('#addBene').addEventListener('click',()=>{
+  if($$('.bene-block',BENE).length>=2) return;
+  BENE.appendChild(beneBlock($$('.bene-block',BENE).length+1)); renumberBene(); applyMasks();
+});
+BENE.appendChild(beneBlock(1)); renumberBene();
+
+/* ---------- Control person same-as toggle ---------- */
+$('#ctrlSame').addEventListener('change',e=>{ $('#ctrlFields').style.display = e.target.checked ? 'none':'block'; });
+
+/* ============================================================
+   DOCUMENT UPLOAD
+   ============================================================ */
+const DOC_BOXES = [
+  {key:'ein',       label:'EIN Letter (IRS CP-575) or W-9', req:true,  hint:'Federal tax ID confirmation.'},
+  {key:'formation', label:'Certificate of Formation / Incorporation / Filing', req:true, hint:'Articles of Organization/Incorporation or state filing.'},
+  {key:'dba',       label:'DBA / Assumed Name Certificate', req:false, hint:'If operating under a trade name.'},
+  {key:'governing', label:'Operating Agreement / Partnership Agreement / Bylaws', req:false, hint:'Entity governing document.'},
+  {key:'id_owner',  label:'Government Photo ID — Owner(s)', req:true, multi:true, hint:'Driver license or passport for each owner.'},
+  {key:'id_control',label:'Government Photo ID — Control Person', req:false, hint:'Full-business applications.'},
+  {key:'resolution',label:'Authorizing Resolution (signers)', req:false, hint:'If signers are not named in formation docs.'},
+  {key:'other',     label:'Other Supporting Documents', req:false, multi:true, hint:'Anything else relevant.'}
+];
+const FILES = {}; // key -> [ {file, id} ]
+const DOCGRID = $('#docGrid');
+const camSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+const fileSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>';
+
+DOC_BOXES.forEach(box=>{
+  FILES[box.key]=[];
+  const dz=document.createElement('div');
+  dz.className='dropzone'+(box.req?' req-box':'');
+  dz.dataset.key=box.key;
+  dz.innerHTML=`
+    <div class="dz-title">${box.label} ${box.req?'<span class="req">*</span>':''}</div>
+    <div class="dz-hint">${box.hint} Any file type.</div>
+    <div class="dz-btns">
+      <button type="button" class="dz-btn choose">${fileSvg} Choose files</button>
+      <button type="button" class="dz-btn cam">${camSvg} Use camera</button>
+    </div>
+    <input type="file" class="in-choose" ${box.multi!==false?'multiple':''} hidden>
+    <input type="file" class="in-cam" accept="image/*" capture="environment" hidden>
+    <div class="dz-files"></div>`;
+  const inChoose=dz.querySelector('.in-choose');   // no accept attr => ALL file types
+  const inCam=dz.querySelector('.in-cam');
+  dz.querySelector('.choose').addEventListener('click',()=>inChoose.click());
+  dz.querySelector('.cam').addEventListener('click',()=>inCam.click());
+  inChoose.addEventListener('change',e=>addFiles(box.key,e.target.files));
+  inCam.addEventListener('change',e=>addFiles(box.key,e.target.files));
+  // drag & drop
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
+  dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
+  dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');addFiles(box.key,e.dataTransfer.files);});
+  DOCGRID.appendChild(dz);
+});
+
+function fmtSize(b){ if(b<1024)return b+' B'; if(b<1048576)return (b/1024).toFixed(0)+' KB'; return (b/1048576).toFixed(1)+' MB'; }
+function extLabel(name){ const m=(name||'').split('.').pop(); return (m&&m.length<=5)?m:'FILE'; }
+
+function addFiles(key,fileList){
+  const box=DOC_BOXES.find(b=>b.key===key);
+  const cap=CFG.maxFilesPerBox;
+  [...fileList].forEach(file=>{
+    if(FILES[key].length>=cap){ toast('warn',`Max ${cap} files for "${box.label}".`); return; }
+    const tooBig=file.size>CFG.maxFileMB*1048576;
+    FILES[key].push({file,id:'f'+Math.random().toString(36).slice(2),bad:tooBig});
+    if(tooBig) toast('warn',`"${file.name}" exceeds ${CFG.maxFileMB} MB and was flagged. Please compress or split it.`);
+  });
+  renderFiles(key); updateProgress();
+}
+function renderFiles(key){
+  const dz=$(`.dropzone[data-key="${key}"]`);
+  const wrap=dz.querySelector('.dz-files');
+  wrap.innerHTML='';
+  FILES[key].forEach(item=>{
+    const row=document.createElement('div');
+    row.className='dz-file'+(item.bad?' bad':'');
+    const isImg=item.file.type.startsWith('image/');
+    const thumb = isImg
+      ? `<img class="dz-thumb" alt="" src="${URL.createObjectURL(item.file)}">`
+      : `<span class="dz-thumb">${extLabel(item.file.name)}</span>`;
+    row.innerHTML=`${thumb}<div class="dz-meta"><div class="dz-name">${item.file.name}</div><div class="dz-size">${fmtSize(item.file.size)}${item.bad?' — too large':''}</div></div><button type="button" class="dz-x" aria-label="Remove">×</button>`;
+    row.querySelector('.dz-x').addEventListener('click',()=>{ FILES[key]=FILES[key].filter(f=>f.id!==item.id); renderFiles(key); updateProgress(); });
+    wrap.appendChild(row);
+  });
+}
+
+/* ============================================================
+   INPUT MASKS
+   ============================================================ */
+function applyMasks(){
+  $$('[data-mask]').forEach(inp=>{
+    if(inp._masked) return; inp._masked=true;
+    inp.addEventListener('input',()=>{
+      const t=inp.dataset.mask; let v=inp.value.replace(/[^\d]/g,'');
+      if(t==='ein'){ v=v.slice(0,9); inp.value=v.length>2?v.slice(0,2)+'-'+v.slice(2):v; }
+      else if(t==='ssn'){ v=v.slice(0,9); inp.value=v.length>5?v.slice(0,3)+'-'+v.slice(3,5)+'-'+v.slice(5):v.length>3?v.slice(0,3)+'-'+v.slice(3):v; }
+      else if(t==='phone'){ v=v.slice(0,10); inp.value=v.length>6?`(${v.slice(0,3)}) ${v.slice(3,6)}-${v.slice(6)}`:v.length>3?`(${v.slice(0,3)}) ${v.slice(3)}`:v.length?`(${v}`:''; }
+      else if(t==='date'){ v=v.slice(0,8); inp.value=v.length>4?v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4):v.length>2?v.slice(0,2)+'/'+v.slice(2):v; }
+      else if(t==='money'){ let raw=inp.value.replace(/[^\d.]/g,''); inp.value=raw; }
+    });
+    if(inp.dataset.mask==='money'){
+      inp.addEventListener('blur',()=>{ if(inp.value){ const n=parseFloat(inp.value.replace(/[^\d.]/g,'')); if(!isNaN(n)) inp.value=n.toFixed(2); } });
+    }
+  });
+}
+
+/* ============================================================
+   SIGNATURE PAD
+   ============================================================ */
+const canvas=$('#sigPad'), sctx=canvas.getContext('2d');
+let drawing=false, signed=false, SIGMODE='draw', typedName='', signedAt=null;
+function markSigned(v){ signed=v; if(v){ signedAt=signedAt||new Date().toISOString(); $('#sigStatus').textContent='Signed ✓ ('+SIGMODE+')'; } else { signedAt=null; $('#sigStatus').textContent='Not signed yet'; } updateProgress(); }
+function cssSize(){ const r=canvas.getBoundingClientRect(); return {w:r.width,h:r.height}; }
+function setupCtx(){ const dpr=window.devicePixelRatio||1; const {w,h}=cssSize(); canvas.width=w*dpr; canvas.height=h*dpr; sctx.setTransform(1,0,0,1,0,0); sctx.scale(dpr,dpr); sctx.lineWidth=2.2; sctx.lineCap='round'; sctx.lineJoin='round'; sctx.strokeStyle='#0a3d62'; }
+function clearCanvas(){ const {w,h}=cssSize(); sctx.clearRect(0,0,w,h); }
+function renderTyped(){ clearCanvas(); const {w,h}=cssSize(); if(!typedName){ markSigned(false); return; } sctx.fillStyle='#0a3d62'; sctx.textBaseline='middle'; let fs=48; do{ sctx.font=fs+'px "Segoe Script","Brush Script MT","Snell Roundhand",cursive'; if(sctx.measureText(typedName).width<=w-24) break; fs-=2; }while(fs>18); sctx.fillText(typedName,16,h/2); markSigned(true); }
+function resizeCanvas(){ const data = (signed && SIGMODE==='draw') ? canvas.toDataURL() : null; setupCtx(); if(SIGMODE==='type'){ renderTyped(); } else if(data){ const img=new Image(); const {w,h}=cssSize(); img.onload=()=>sctx.drawImage(img,0,0,w,h); img.src=data; } }
+function setSigMode(m){ SIGMODE=m; $('#sigModeDraw').setAttribute('aria-pressed',m==='draw'); $('#sigModeType').setAttribute('aria-pressed',m==='type'); $('#sigTypeWrap').hidden=(m!=='type'); clearCanvas(); if(m==='type'){ renderTyped(); } else { markSigned(false); } }
+window.setSigMode=setSigMode;
+$('#sigTypeInput').addEventListener('input',e=>{ typedName=e.target.value.trim(); renderTyped(); });
+function pos(e){ const r=canvas.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left,y:t.clientY-r.top}; }
+function start(e){ if(SIGMODE!=='draw')return; e.preventDefault(); drawing=true; const p=pos(e); sctx.beginPath(); sctx.moveTo(p.x,p.y); }
+function move(e){ if(!drawing||SIGMODE!=='draw')return; e.preventDefault(); const p=pos(e); sctx.lineTo(p.x,p.y); sctx.stroke(); markSigned(true); }
+function end(){ drawing=false; }
+canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
+canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touchmove',move,{passive:false}); canvas.addEventListener('touchend',end);
+$('#sigClear').addEventListener('click',()=>{ clearCanvas(); typedName=''; $('#sigTypeInput').value=''; markSigned(false); });
+setTimeout(resizeCanvas,60); window.addEventListener('resize',()=>setTimeout(resizeCanvas,80));
+
+/* ============================================================
+   VALIDATION + PROGRESS
+   ============================================================ */
+function visibleRequired(){
+  return $$('[data-req]').filter(el=>{
+    if(el.closest('[hidden]')) return false;
+    const dz=el.closest('.dropzone'); if(dz&&dz.hidden) return false;
+    return true;
+  });
+}
+function fieldFilled(el){
+  if(el.type==='email'){ return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value.trim()); }
+  return el.value.trim().length>0;
+}
+function requiredDocsOK(){
+  return DOC_BOXES.filter(b=>b.req).every(b=>{
+    const dz=$(`.dropzone[data-key="${b.key}"]`);
+    if(dz.hidden) return true;
+    return FILES[b.key].some(f=>!f.bad);
+  });
+}
+function computeProgress(){
+  let total=0,done=0;
+  visibleRequired().forEach(el=>{ total++; if(fieldFilled(el)) done++; });
+  $$('[data-req-check]').forEach(el=>{ if(!el.closest('[hidden]')){ total++; if(el.checked) done++; } });
+  DOC_BOXES.filter(b=>b.req).forEach(b=>{ const dz=$(`.dropzone[data-key="${b.key}"]`); if(!dz.hidden){ total++; if(FILES[b.key].some(f=>!f.bad)) done++; } });
+  total++; if(signed) done++; // signature
+  return {total,done,pct: total? Math.round(done/total*100):0};
+}
+function updateProgress(){
+  const {pct}=computeProgress();
+  $('#progFill').style.width=pct+'%';
+  $('#progTxt').textContent=pct+'% complete';
+}
+function wireProgress(){
+  $$('#intakeForm input,#intakeForm select,#intakeForm textarea').forEach(el=>{
+    if(el._prog) return; el._prog=true;
+    el.addEventListener('input',updateProgress); el.addEventListener('change',updateProgress);
+  });
+}
+
+function validate(){
+  let firstBad=null;
+  $$('.field.show-err').forEach(f=>f.classList.remove('show-err'));
+  $$('.invalid').forEach(e=>e.classList.remove('invalid'));
+  visibleRequired().forEach(el=>{
+    if(!fieldFilled(el)){
+      el.classList.add('invalid'); const f=el.closest('.field'); if(f)f.classList.add('show-err');
+      if(!firstBad) firstBad=el;
+    }
+  });
+  const problems=[];
+  $$('[data-req-check]').forEach(el=>{ if(!el.closest('[hidden]')&&!el.checked){ problems.push(el.name==='esign_consent'?'E-SIGN consent':'Agreement acknowledgement'); if(!firstBad)firstBad=el; } });
+  if(!requiredDocsOK()){ problems.push('Required documents (EIN, Formation, Owner ID)'); }
+  if(!signed){ problems.push('Signature'); }
+  if(firstBad){ firstBad.scrollIntoView({behavior:'smooth',block:'center'}); }
+  return {ok: !firstBad && requiredDocsOK() && signed && $$('[data-req-check]').filter(e=>!e.closest('[hidden]')&&!e.checked).length===0, problems};
+}
+
+/* ============================================================
+   COLLECT + SUBMIT
+   ============================================================ */
+function fileToB64(file){return new Promise(function(resolve){var r=new FileReader();r.onload=function(){resolve(String(r.result).split(',')[1]||'');};r.onerror=function(){resolve('');};r.readAsDataURL(file);});}
+async function collect(){
+  const data={ _meta:{ org:CFG.orgName, formScope:SCOPE, submittedAt:new Date().toISOString(), userAgent:navigator.userAgent } };
+  $$('#intakeForm input,#intakeForm select,#intakeForm textarea').forEach(el=>{
+    if(el.type==='file') return;
+    if(el.closest('[hidden]')) return;
+    if((el.type==='checkbox')){ if(el.checked){ (data[el.name]=data[el.name]||[]).push(el.value===''?true:el.value); } return; }
+    if(el.type==='radio'){ if(el.checked) data[el.name]=el.value; return; }
+    if(el.value!=='' && el.value!=null) data[el.name]=el.value;
+  });
+  if(signed){
+    data._signatureDataUrl = canvas.toDataURL('image/png');
+    data._esign = {
+      mode: SIGMODE,
+      typedName: SIGMODE==='type' ? typedName : null,
+      signedAt: signedAt || new Date().toISOString(),
+      consents: {
+        esign_communications: !!(document.querySelector('[name=esign_consent]')||{}).checked,
+        agreement: !!(document.querySelector('[name=agree]')||{}).checked,
+        signature_adoption: !!(document.querySelector('[name=esign_adopt]')||{}).checked
+      },
+      signerName: (document.querySelector('[name=sign_name]')||{}).value || null
+    };
+  }
+  // files -> base64 (JSON-safe, works with any backend incl. Google Apps Script)
+  const documents=[]; let fileCount=0;
+  for(let bi=0; bi<DOC_BOXES.length; bi++){
+    const b=DOC_BOXES[bi];
+    const list=FILES[b.key].filter(f=>!f.bad);
+    for(let fi=0; fi<list.length; fi++){
+      const f=list[fi];
+      documents.push({ box:b.key, label:b.label, filename:f.file.name, mimeType:f.file.type||'application/octet-stream', size:f.file.size, contentBase64: await fileToB64(f.file) });
+      fileCount++;
+    }
+  }
+  return { payload:{ application:data, documents:documents }, data, fileCount };
+}
+
+async function doSubmit(){
+  const v=validate();
+  if(!v.ok){ toast('err','Please complete the highlighted items: '+(v.problems.join(', ')||'required fields')+'.'); return; }
+  const btn=$('#submitBtn'); btn.disabled=true; btn.textContent='Preparing files...';
+  const {payload,data,fileCount}=await collect();
+
+  if(!CFG.submitEndpoint){
+    btn.disabled=false; btn.textContent='Submit Application';
+    reviewModal(data,fileCount); // SAFE REVIEW MODE - transmit nothing
+    return;
+  }
+  btn.textContent='Submitting...';
+  try{
+    // text/plain keeps this a simple request (no CORS preflight); no-cors lets it reach
+    // cross-origin endpoints such as a Google Apps Script Web App.
+    await fetch(CFG.submitEndpoint,{ method:CFG.submitMethod||'POST', mode:'no-cors', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload) });
+    toast('ok','Application submitted to Heritage Hub FCU. A representative will follow up. Reference the business name and email you provided.');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }catch(err){
+    toast('err','We could not submit right now. Please check your connection and try again, or contact 832-941-9122.');
+  }finally{
+    btn.disabled=false; btn.textContent='Submit Application';
+  }
+}
+
+/* review modal (no-endpoint mode) */
+function reviewModal(data,fileCount){
+  const filesSummary=DOC_BOXES.map(b=>{const n=FILES[b.key].filter(f=>!f.bad).length; return n?`• ${b.label}: ${n} file(s)`:null;}).filter(Boolean).join('\n')||'• (none)';
+  const clean=JSON.parse(JSON.stringify(data)); delete clean._signatureDataUrl;
+  $('#modalTitle').textContent='Application ready to submit';
+  $('#modalBody').innerHTML=`
+    <div class="banner warn show" style="margin-bottom:12px">This live form is not yet connected to Heritage Hub FCU's secure intake endpoint, so nothing has been transmitted. An administrator must set <code>submitEndpoint</code> in the page configuration. You can download a summary below for testing.</div>
+    <p><strong>Attached documents (${fileCount}):</strong></p>
+    <pre>${filesSummary}</pre>
+    <p style="margin-top:12px"><strong>Form data:</strong></p>
+    <pre>${escapeHtml(JSON.stringify(clean,null,2))}</pre>`;
+  $('#modalFoot').innerHTML='';
+  const dl=document.createElement('button'); dl.className='btn-submit'; dl.style.background='var(--navy-2)'; dl.textContent='Download summary (.json)';
+  dl.onclick=()=>{ const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='HHFCU-application-'+(data.legal_business_name||'applicant').replace(/\W+/g,'_')+'.json'; a.click(); };
+  const close=document.createElement('button'); close.className='btn-ghost'; close.textContent='Close'; close.onclick=closeModal;
+  $('#modalFoot').append(dl,close);
+  $('#overlay').classList.add('show');
+}
+function closeModal(){ $('#overlay').classList.remove('show'); }
+function escapeHtml(s){ return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+/* toast banners */
+function toast(type,msg){
+  const map={err:'#bannerErr',ok:'#bannerOk',warn:'#bannerWarn'};
+  ['#bannerErr','#bannerOk','#bannerWarn'].forEach(s=>$(s).classList.remove('show'));
+  const el=$(map[type]); el.textContent=msg; el.classList.add('show');
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  if(type!=='err') setTimeout(()=>el.classList.remove('show'),9000);
+}
+
+$('#submitBtn').addEventListener('click',doSubmit);
+
+/* init */
+applyMasks(); wireProgress(); setScope('simple');
+</script>
+<script>
+/* Embed auto-resize: tells the parent page how tall the form is so the iframe can grow to fit. */
+(function(){
+  function docH(){return Math.max(document.documentElement.scrollHeight, document.body?document.body.scrollHeight:0);}
+  function report(){try{parent.postMessage({hhfcuEmbedHeight:docH()},'*');}catch(e){}}
+  window.addEventListener('load',report);
+  window.addEventListener('resize',report);
+  if(window.ResizeObserver){try{new ResizeObserver(report).observe(document.body);}catch(e){}}
+  ['click','input','change'].forEach(function(ev){document.addEventListener(ev,function(){setTimeout(report,120);});});
+  setInterval(report,1500);
+  report();
+})();
+</script>
+</body>
+</html>
