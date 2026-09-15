@@ -891,7 +891,15 @@ function toast(type,msg){
 $('#submitBtn').addEventListener('click',doSubmit);
 
 /* init */
-applyMasks(); wireProgress(); setScope('simple');
+/* Preselect application mode from the launching link:
+   ?type=full / #full / "multiple" / "bsa"  -> Full business (BSA)
+   ?type=single / #single / (default)       -> Simple (single owner) */
+function initialScope(){
+  var s=(location.search+' '+location.hash).toLowerCase();
+  if(/full|multi|bsa/.test(s)) return 'full';
+  return 'simple';
+}
+applyMasks(); wireProgress(); setScope(initialScope());
 </script>
 <script>
 /* Embed auto-resize: tells the parent page how tall the form is so the iframe can grow to fit. */
